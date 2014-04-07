@@ -1,0 +1,92 @@
+﻿<html>
+<head>
+    <title>郑健矩阵</title>
+    <style>
+        span {
+            display: inline-block;
+            width: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="idDiv"></div>
+
+<script>
+    function zhengjianMatrix(x) {
+        //创建数组
+        var arr = new Array();
+        for (var y = 0; y < x; y++) {
+            arr[y] = new Array();
+            for (var z = 0; z < x; z++) {
+                arr[y][z] = 0;
+            }
+        }
+
+        //轮次，基数矩阵为(x+1)/2，偶数矩阵为(x/2)
+        var loop = (0 === x % 2) ? x / 2 : (x + 1) / 2;
+        //执行点次数
+        var point = 1;
+        //操作点坐标轴，处理次数，数值
+        var a, b, count, value;
+        //作用点数值计算
+        var pointFunc = function (p) {
+            var ret = (2 * p - 1) * x - (p * (p - 1));
+            point++;
+            return ret;
+        }
+        //循环处理每轮
+        for (var i = 1; i <= loop; i++) {
+            //右上角
+            count = x - i * 2 + 1;
+            if (count >= 0) {
+                a = i - 1;
+                b = x - i;
+                value = pointFunc(point);
+                //写入数组
+                arr[a][b] = value;
+                for (var j = 1; j <= count; j++) {
+                    arr[a][b - j] = value - j;
+                    arr[a + j][b] = value + j;
+                }
+            }
+            //左下角
+            count = x - i * 2;
+            if (count >= 0) {
+                a = x - i;
+                b = i - 1;
+                value = pointFunc(point);
+                //写入数组
+                arr[a][b] = value;
+                for (var j = 1; j <= count; j++) {
+                    arr[a][b + j] = value - j;
+                    arr[a - j][b] = value + j;
+                }
+            }
+        }
+        return arr;
+    }
+</script>
+
+<script>
+    //输出
+    var arr = zhengjianMatrix(8);
+    
+    //p标签格式输出
+    //var str = '';
+    //    for (var tempI in arr) {
+    //        str += '<p><span>' + arr[tempI].join('</span><span>') + '</span></p>';
+    //    }
+    //    document.getElementById('idDiv').innerHTML = str;
+
+    //table格式输出
+    var str1 = '';
+    for (var tempI in arr) {
+        str1 += '<tr><td>' + arr[tempI].join('</td><td>') + '</td></tr>';
+    }
+    str1 = '<table style="border-spacing:10px">' + str1 + '</table>';
+    document.getElementById('idDiv').innerHTML = str1;
+
+
+</script>
+</body>
+</html>
